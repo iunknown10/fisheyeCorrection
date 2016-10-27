@@ -6,8 +6,8 @@
 #include <opencv2\core\core.hpp>
 #include <opencv2\highgui\highgui.hpp>
 #include <opencv2\imgproc\imgproc.hpp>
-#include "fisheye_corrector.h"
-#include "find_perspective_transform.h"
+#include "fisheye_corrector\fisheye_corrector.h"
+#include "find_perspective_transform\find_perspective_transform.h"
 
 const float focal = 150;//Measured in pixels
 
@@ -46,7 +46,11 @@ int main(int argc, char* argv[])
 			-0.0001161970505587349, -0.002209380538794291, 1
 			);
 	corrector.setPerspectiveTransformation(perspectiveTransform);
-	std::cout << "K" << std::endl << corrector.getIntrinsicMatrix() << std::endl;
+	cv::Mat K = corrector.getIntrinsicMatrix();
+	std::cout << "K" << std::endl << K << std::endl;
+	std::ofstream K_file("K.txt");
+	K_file << K << std::endl;
+	K_file.close();
 	//Use this function if you want to find perspective distortion yourself
 	//findPerspectiveDistortion(frame, corrector);
 
@@ -73,9 +77,10 @@ int main(int argc, char* argv[])
 
 		writer << corrected_frame;
 		capture >> frame;
-		cv::waitKey(10);
-		if (frameCount > 1000)
-			break;
+		if (cv::waitKey(10) == 'c')
+			findPerspectiveDistortion(frame,corrector);
+		/*if (frameCount > 1000)
+			break;*/
 		frameCount++;
 	}
 	writer.release();

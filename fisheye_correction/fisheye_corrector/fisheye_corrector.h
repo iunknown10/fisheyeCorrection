@@ -48,7 +48,7 @@ public:
 
 	cv::Mat& correct(const cv::Mat& src, cv::Mat& dst)
 	{
-		cv::remap(src, dst, map_, cv::Mat(), cv::INTER_CUBIC);
+		cv::remap(src, dst, map_, cv::Mat(), cv::INTER_NEAREST);
 		return dst;
 	}
 
