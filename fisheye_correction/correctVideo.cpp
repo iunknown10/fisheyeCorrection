@@ -8,10 +8,9 @@
 #include <opencv2\imgproc\imgproc.hpp>
 #include "fisheye_corrector\fisheye_corrector.h"
 #include "find_perspective_transform\find_perspective_transform.h"
+#include "correctTools.h"
 
-const float focal = 150;//Measured in pixels
-
-int main(int argc, char* argv[])
+void correctVideo(int argc, char* argv[])
 {
 	if (argc < 3)
 	{
@@ -56,17 +55,20 @@ int main(int argc, char* argv[])
 
 
 
-
+	std::string filePath;
 	std::string correct_file_name = "correct2_";
 	int file_name_pos = videoName.find_last_of('\\');
 	if (file_name_pos != -1)
-		correct_file_name += videoName.substr(file_name_pos);
+	{
+		correct_file_name += videoName.substr(file_name_pos+1);
+		filePath += videoName.substr(0, file_name_pos + 1);
+	}
 	else
 		correct_file_name += videoName;
 
 
-	cv::VideoWriter writer(correct_file_name, capture.get(CV_CAP_PROP_FOURCC), capture.get(CV_CAP_PROP_FPS), corrector.getCorrectedSize());
-
+	cv::VideoWriter writer(filePath + correct_file_name, capture.get(CV_CAP_PROP_FOURCC), capture.get(CV_CAP_PROP_FPS), corrector.getCorrectedSize());
+	std::cout << "save file to " << filePath + correct_file_name<<std::endl;
 	int frameCount = 0;
 	while (!frame.empty())
 	{

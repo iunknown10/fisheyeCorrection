@@ -15,16 +15,28 @@
     <Filter Include="find_perspective_transform">
       <UniqueIdentifier>{52828e6b-2b00-4270-8433-12f2b64da789}</UniqueIdentifier>
     </Filter>
+    <Filter Include="tools">
+      <UniqueIdentifier>{f2703409-bacc-428b-bb9a-e3b1d572acee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="fisheye_correction.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="fisheye_corrector\fisheye_corrector.cpp">
       <Filter>fisheye_corrector</Filter>
     </ClCompile>
     <ClCompile Include="find_perspective_transform\find_perspective_transform.cpp">
       <Filter>find_perspective_transform</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="correctImage.cpp">
+      <Filter>tools</Filter>
+    </ClCompile>
+    <ClCompile Include="correctVideo.cpp">
+      <Filter>tools</Filter>
+    </ClCompile>
+    <ClCompile Include="ORBtest.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -33,6 +45,9 @@
     </ClInclude>
     <ClInclude Include="find_perspective_transform\find_perspective_transform.h">
       <Filter>find_perspective_transform</Filter>
+    </ClInclude>
+    <ClInclude Include="correctTools.h">
+      <Filter>tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

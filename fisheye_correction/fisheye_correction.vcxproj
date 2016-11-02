@@ -78,11 +78,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="correctImage.cpp" />
     <ClCompile Include="find_perspective_transform\find_perspective_transform.cpp" />
-    <ClCompile Include="fisheye_correction.cpp" />
+    <ClCompile Include="correctVideo.cpp" />
     <ClCompile Include="fisheye_corrector\fisheye_corrector.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ORBtest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="correctTools.h" />
     <ClInclude Include="find_perspective_transform\find_perspective_transform.h" />
     <ClInclude Include="fisheye_corrector\fisheye_corrector.h" />
   </ItemGroup>
