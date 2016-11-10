@@ -4,6 +4,11 @@ Fisheye correction using distortion table
 This is a fisheye camera correction project.
 It use distortion table provided by the camera manufactor and undistort the fisheye images to normal pinhole images.
 
+##install
+It's a Visual studio project created using VS2013.
+It's need OpenCV library and I use 2.4.11 version in the project.
+I provide a props table in thirdPartyLibrary directory. You can change the path in these files to the location of OpenCV in your computer.
+
 
 ##Distortion table:
 You can refer to sw4066.txt to find what a distortion table used in this project look like.
