@@ -43,7 +43,7 @@ void FisheyeCorrector::generateMap()
 			float degree = radianToDegree(atan(radius_in_project / f_)) * 10;
 
 			int position_in_list = round(degree);
-			float  radius_in_fisheye = distortion_list_[position_in_list] / 0.0042;
+			float  radius_in_fisheye = distortion_list_[position_in_list] / pixelHeight_;
 			float x = ((pers_w - CenterX_) *(radius_in_fisheye / radius_in_project));/// pow(0.3 / Height_*h + 0.7,2)
 			float y = (pers_h - CenterY_)*(radius_in_fisheye / radius_in_project);
 
@@ -53,8 +53,8 @@ void FisheyeCorrector::generateMap()
 	}
 
 
-	FisheyeCorrector::FisheyeCorrector(std::string correction_table_file, int input_height, int input_width, float f, float VerticalDegeree, float HorizontalDegree)
-		:f_(f), HorizontalDegree_(degereeToRadian(HorizontalDegree)), VerticalDegeree_(degereeToRadian(VerticalDegeree))
+	FisheyeCorrector::FisheyeCorrector(std::string correction_table_file, int input_height, int input_width, int pixelHeight, float f, float VerticalDegeree, float HorizontalDegree)
+		:pixelHeight_(pixelHeight),f_(f), HorizontalDegree_(degereeToRadian(HorizontalDegree)), VerticalDegeree_(degereeToRadian(VerticalDegeree))
 	{
 		Width_ = tan(HorizontalDegree_)*f_ * 2;
 		Height_ = tan(VerticalDegeree_)*f_ * 2;

@@ -39,8 +39,8 @@ void correctImage(int argc, char* argv[])
 	else
 		correct_file_name += imageName;
 
-
-	FisheyeCorrector corrector(correction_table, image.rows, image.cols);
+	float pixelHeight = 0.0042;
+	FisheyeCorrector corrector(correction_table, image.rows, image.cols, pixelHeight);
 	//Deal with the perspective distortion
 	//This is a perspective distortion correction matrix finded manually. 
 	//Please notice that this is for vertical range at 53 degree  and horiental range 70 degree and different range should use different perspective correction

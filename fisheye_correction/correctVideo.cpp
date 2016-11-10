@@ -34,8 +34,8 @@ void correctVideo(int argc, char* argv[])
 		exit(-1);
 	}
 	capture >> frame;
-
-	FisheyeCorrector corrector(correction_table, capture.get(CV_CAP_PROP_FRAME_HEIGHT), capture.get(CV_CAP_PROP_FRAME_WIDTH));
+	float pixelHeight = 0.0042;
+	FisheyeCorrector corrector(correction_table, capture.get(CV_CAP_PROP_FRAME_HEIGHT), capture.get(CV_CAP_PROP_FRAME_WIDTH), pixelHeight);
 	//Deal with the perspective distortion
 	//This is a perspective distortion correction matrix finded manually. 
 	//Please notice that this is for vertical range at 53 degree  and horiental range 70 degree and different range should use different perspective correction

@@ -27,7 +27,7 @@ class FisheyeCorrector
 	float CenterY_;
 	float CenterX_fisheye_;
 	float CenterY_fisheye_;
-
+	float pixelHeight_;
 private:
 	void readDistortionList(std::string file_name);
 
@@ -35,8 +35,8 @@ private:
 
 
 public:
-
-	FisheyeCorrector(std::string correction_table_file, int input_height, int input_width, float f = 150, float VerticalDegeree = 53, float HorizontalDegree = 70);
+	//Correction table and pixelHeight should provided by camera manufactor. focal length will infuence the size of the result image.
+	FisheyeCorrector(std::string correction_table_file, int input_height, int input_width, int pixelHeight, float f = 150, float VerticalDegeree = 60, float HorizontalDegree = 80);
 
 	void setPerspectiveTransformation(cv::Mat& perspectiveTrans);
 

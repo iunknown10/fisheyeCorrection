@@ -83,7 +83,6 @@
     <ClCompile Include="correctVideo.cpp" />
     <ClCompile Include="fisheye_corrector\fisheye_corrector.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ORBtest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="correctTools.h" />
