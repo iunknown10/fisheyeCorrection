@@ -53,7 +53,7 @@ void FisheyeCorrector::generateMap()
 	}
 
 
-	FisheyeCorrector::FisheyeCorrector(std::string correction_table_file, int input_height, int input_width, int pixelHeight, float f, float VerticalDegeree, float HorizontalDegree)
+	FisheyeCorrector::FisheyeCorrector(std::string correction_table_file, int input_height, int input_width, float pixelHeight, float f, float VerticalDegeree, float HorizontalDegree)
 		:pixelHeight_(pixelHeight),f_(f), HorizontalDegree_(degereeToRadian(HorizontalDegree)), VerticalDegeree_(degereeToRadian(VerticalDegeree))
 	{
 		Width_ = tan(HorizontalDegree_)*f_ * 2;

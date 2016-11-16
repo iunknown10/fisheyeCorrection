@@ -36,7 +36,7 @@ private:
 
 public:
 	//Correction table and pixelHeight should provided by camera manufactor. focal length will infuence the size of the result image.
-	FisheyeCorrector(std::string correction_table_file, int input_height, int input_width, int pixelHeight, float f = 150, float VerticalDegeree = 60, float HorizontalDegree = 80);
+	FisheyeCorrector(std::string correction_table_file, int input_height, int input_width, float pixelHeight, float f = 150, float VerticalDegeree = 60, float HorizontalDegree = 80);
 
 	void setPerspectiveTransformation(cv::Mat& perspectiveTrans);
 
@@ -48,7 +48,7 @@ public:
 
 	cv::Mat& correct(const cv::Mat& src, cv::Mat& dst)
 	{
-		cv::remap(src, dst, map_, cv::Mat(), cv::INTER_NEAREST);
+		cv::remap(src, dst, map_, cv::Mat(), cv::INTER_CUBIC);
 		return dst;
 	}
 
