@@ -57,14 +57,17 @@ public:
 
 	cv::Size getCorrectedSize()
 	{
-		return cv::Size(Width_, Height_);
+		return cv::Size(map_.cols, map_.rows);
 	}
 
 	void setClipRegion(cv::Rect& region)
 	{
 		clip_region_ = region;
-		K_.at<float>(0, 2) - region.x;
-		K_.at<float>(1, 2) - region.y;
+		std::cout<<"K before clip"<<std::endl << K_ << std::endl;
+		std::cout << region.x << " " << region.y << std::endl;
+		K_.at<double>(0, 2) -= region.x;
+		K_.at<double>(1, 2) -= region.y;
+		std::cout << "K after clip" << std::endl << K_ << std::endl;
 		map_ = original_map_(region);
 	}
 

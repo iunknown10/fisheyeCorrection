@@ -59,8 +59,8 @@ void FisheyeCorrector::generateMap()
 	{
 		Width_ = tan(HorizontalDegree_)*f_ * 2;
 		Height_ = tan(VerticalDegeree_)*f_ * 2;
-		CenterX_ = Width_ / 2.0f;
-		CenterY_ = Height_ / 2.0f;
+		CenterX_ = (float)Width_ / 2.0f;
+		CenterY_ = (float)Height_ / 2.0f;
 		CenterX_fisheye_ = input_width / 2.0f;
 		CenterY_fisheye_ = input_height / 2.0f;
 		readDistortionList(correction_table_file);
@@ -73,7 +73,7 @@ void FisheyeCorrector::generateMap()
 			);
 		generateMap();
 		clip_region_ = cv::Rect(0, 0, Width_, Height_);
-		std::cout << "corrected image size is  width:" << Width_ << " height:" << Height_ << std::endl;
+		std::cout << "Full size of corrected imageis  width:" << Width_ << " height:" << Height_ << std::endl;
 	}
 
 	void FisheyeCorrector::setPerspectiveTransformation(cv::Mat& perspectiveTrans)

@@ -35,9 +35,6 @@
     <ClCompile Include="correctVideo.cpp">
       <Filter>tools</Filter>
     </ClCompile>
-    <ClCompile Include="correctFrontVideo.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fisheye_corrector\fisheye_corrector.h">

@@ -78,7 +78,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="correctFrontVideo.cpp" />
     <ClCompile Include="correctImage.cpp" />
     <ClCompile Include="find_perspective_transform\find_perspective_transform.cpp" />
     <ClCompile Include="correctVideo.cpp" />
