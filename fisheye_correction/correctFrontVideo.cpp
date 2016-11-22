@@ -10,13 +10,13 @@
 #include "find_perspective_transform\find_perspective_transform.h"
 #include "correctTools.h"
 
-void correctVideo(int argc, char* argv[])
+void correctFrontVideo(int argc, char* argv[])
 {
 	if (argc < 3)
 	{
 		std::cout << "need correction table file and video name for parameters" << std::endl;
 	}
-		
+
 
 	std::string correction_table = argv[1];
 	std::string videoName = argv[2];
@@ -25,7 +25,7 @@ void correctVideo(int argc, char* argv[])
 	cv::namedWindow("corrected", 0);
 
 
-	cv::Mat frame,corrected_frame;
+	cv::Mat frame, corrected_frame;
 
 	if (!capture.isOpened())
 	{
@@ -36,16 +36,7 @@ void correctVideo(int argc, char* argv[])
 	capture >> frame;
 	float pixel_height = 0.0042;
 	float focal_length = 306.605;
-	FisheyeCorrector corrector(correction_table, capture.get(CV_CAP_PROP_FRAME_HEIGHT), capture.get(CV_CAP_PROP_FRAME_WIDTH), pixel_height,150 ,60,65);
-	//Deal with the perspective distortion
-	//This is a perspective distortion correction matrix finded manually. 
-	//Please notice that this is for vertical range at 53 degree  and horiental range 70 degree and different range should use different perspective correction
-	/*cv::Mat perspectiveTransform = (cv::Mat_<double>(3, 3) <<
-			0.7120342503081317, -0.9080554014444526, 98.72580114592542,
-			-0.03621256531992459, 0.7347221335742586, 15.81086229667521,
-			-0.0001161970505587349, -0.002209380538794291, 1
-			);
-	corrector.setPerspectiveTransformation(perspectiveTransform);*/
+	FisheyeCorrector corrector(correction_table, capture.get(CV_CAP_PROP_FRAME_HEIGHT), capture.get(CV_CAP_PROP_FRAME_WIDTH), pixel_height, 150, 60, 65);
 	cv::Mat K = corrector.getIntrinsicMatrix();
 	std::cout << "K" << std::endl << K << std::endl;
 	std::ofstream K_file("K.txt");
@@ -61,7 +52,7 @@ void correctVideo(int argc, char* argv[])
 	int file_name_pos = videoName.find_last_of('\\');
 	if (file_name_pos != -1)
 	{
-		correct_file_name += videoName.substr(file_name_pos+1);
+		correct_file_name += videoName.substr(file_name_pos + 1);
 		filePath += videoName.substr(0, file_name_pos + 1);
 	}
 	else
@@ -69,7 +60,7 @@ void correctVideo(int argc, char* argv[])
 
 
 	cv::VideoWriter writer(filePath + correct_file_name, capture.get(CV_CAP_PROP_FOURCC), capture.get(CV_CAP_PROP_FPS), corrector.getCorrectedSize());
-	std::cout << "save file to " << filePath + correct_file_name<<std::endl;
+	std::cout << "save file to " << filePath + correct_file_name << std::endl;
 	int frameCount = 0;
 	while (!frame.empty())
 	{
@@ -81,11 +72,9 @@ void correctVideo(int argc, char* argv[])
 		writer << corrected_frame;
 		capture >> frame;
 		if (cv::waitKey(10) == 'c')
-			findPerspectiveDistortion(frame,corrector);
-		/*if (frameCount > 3000)
-			break;*/
-		if (frameCount % 300 == 0)
-			std::cout << "frame " << frameCount << std::endl;
+			findPerspectiveDistortion(frame, corrector);
+		/*if (frameCount > 100)
+		break;*/
 		frameCount++;
 	}
 	writer.release();

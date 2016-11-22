@@ -50,6 +50,7 @@ void FisheyeCorrector::generateMap()
 			//Add the map relationship of Point(h,w)
 			map_.at<cv::Vec2f>(h, w) = cv::Vec2f(x + CenterX_fisheye_, y + CenterY_fisheye_);
 			}
+		map_.copyTo(original_map_);
 	}
 
 
@@ -71,7 +72,7 @@ void FisheyeCorrector::generateMap()
 			0, 0, 1
 			);
 		generateMap();
-
+		clip_region_ = cv::Rect(0, 0, Width_, Height_);
 		std::cout << "corrected image size is  width:" << Width_ << " height:" << Height_ << std::endl;
 	}
 

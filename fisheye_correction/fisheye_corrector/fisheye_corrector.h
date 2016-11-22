@@ -17,6 +17,7 @@ class FisheyeCorrector
 	cv::Mat perspectiveTrans_;
 	cv::Mat K_;
 
+	cv::Mat original_map_;
 	cv::Mat map_;
 	float f_;
 	float VerticalDegeree_;
@@ -28,6 +29,8 @@ class FisheyeCorrector
 	float CenterX_fisheye_;
 	float CenterY_fisheye_;
 	float pixelHeight_;
+
+	cv::Rect clip_region_;
 private:
 	void readDistortionList(std::string file_name);
 
@@ -55,6 +58,14 @@ public:
 	cv::Size getCorrectedSize()
 	{
 		return cv::Size(Width_, Height_);
+	}
+
+	void setClipRegion(cv::Rect& region)
+	{
+		clip_region_ = region;
+		K_.at<float>(0, 2) - region.x;
+		K_.at<float>(1, 2) - region.y;
+		map_ = original_map_(region);
 	}
 
 	cv::Mat getIntrinsicMatrix()
