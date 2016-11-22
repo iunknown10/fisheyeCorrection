@@ -35,8 +35,8 @@ void correctVideo(int argc, char* argv[])
 	}
 	capture >> frame;
 	float pixel_height = 0.0042;
-	float focal_length = 306.605;
-	FisheyeCorrector corrector(correction_table, capture.get(CV_CAP_PROP_FRAME_HEIGHT), capture.get(CV_CAP_PROP_FRAME_WIDTH), pixel_height,150 );
+	float focal_length = 306.605;//This 
+	FisheyeCorrector corrector(correction_table, capture.get(CV_CAP_PROP_FRAME_HEIGHT), capture.get(CV_CAP_PROP_FRAME_WIDTH), pixel_height,150,60,65 );
 	//Deal with the perspective distortion
 	//This is a perspective distortion correction matrix finded manually. 
 	//Please notice that this is for vertical range at 53 degree  and horiental range 70 degree and different range should use different perspective correction
@@ -82,8 +82,10 @@ void correctVideo(int argc, char* argv[])
 		capture >> frame;
 		if (cv::waitKey(10) == 'c')
 			findPerspectiveDistortion(frame,corrector);
-		/*if (frameCount > 100)
+		/*if (frameCount > 3000)
 			break;*/
+		if (frameCount % 300 == 0)
+			std::cout << "frame " << frameCount << std::endl;
 		frameCount++;
 	}
 	writer.release();
