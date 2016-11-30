@@ -63,11 +63,8 @@ public:
 	void setClipRegion(cv::Rect& region)
 	{
 		clip_region_ = region;
-		std::cout<<"K before clip"<<std::endl << K_ << std::endl;
-		std::cout << region.x << " " << region.y << std::endl;
 		K_.at<double>(0, 2) -= region.x;
 		K_.at<double>(1, 2) -= region.y;
-		std::cout << "K after clip" << std::endl << K_ << std::endl;
 		map_ = original_map_(region);
 	}
 
