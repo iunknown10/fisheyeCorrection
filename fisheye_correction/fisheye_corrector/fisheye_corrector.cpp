@@ -55,11 +55,11 @@ void FisheyeCorrector::readDistortionList(std::string file_name)
 void FisheyeCorrector::generateMap()
 {
 	map_ = cv::Mat(Height_, Width_, CV_32FC2);
-	float angle_between_original_axis = radianToDegree(asin(sqrt(pow(sin(axis_horizontal_radian_), 2) + pow(sin(axis_vertical_radian_)*cos(axis_horizontal_radian_), 2))));
+	float angle_between_original_axis = radianToDegree(asin(sqrt(pow(sin(axis_vertical_radian_), 2) + pow(sin(axis_horizontal_radian_)*cos(axis_vertical_radian_), 2))));
 	float  radius_in_fisheye = distortion_list_[angle_between_original_axis*10] / pixelHeight_;
 	f_image_ = angle_between_original_axis<0.01 ? f_camera_: radius_in_fisheye / sin(degreeToRadian(angle_between_original_axis));
-	float trans_y = sin(axis_horizontal_radian_)*f_image_;
-	float trans_x = sqrt(radius_in_fisheye*radius_in_fisheye - trans_y*trans_y);
+	float trans_y = sin(axis_vertical_radian_)*f_image_;
+	float trans_x = cos(axis_vertical_radian_)*f_image_*sin(axis_horizontal_radian_);
 	float trans_z = -f_camera_ + f_image_ / cos(degreeToRadian(angle_between_original_axis));
 	Eigen::Vector3f new_camera_plane_center(trans_x, trans_y, trans_z);
 	Eigen::Vector3f  original_camera_plane_center(0, 0, 0);
@@ -91,7 +91,7 @@ void FisheyeCorrector::generateMap()
 		//std::cout << "-----------------------------------------" << std::endl
 			//<< "h w " << h << " " << w << std::endl;
 		//Transform the points in the corrected image to it's correct position
-		Eigen::Vector4f point_homo(w - CenterX_, h - CenterY_, 0, 1);
+		Eigen::Vector4f point_homo(w - CenterX_, -h + CenterY_, 0, 1);
 		int pers_h = point_homo(1);
 		int pers_w = point_homo(0);
 		//std::cout << "point_homo " << point_homo << std::endl;
@@ -112,7 +112,7 @@ void FisheyeCorrector::generateMap()
 		float y = (point(1))*(radius_in_fisheye / radius_in_project);
 
 		//Add the map relationship of Point(h,w)
-		map_.at<cv::Vec2f>(h, w) = cv::Vec2f(x + CenterX_fisheye_, y + CenterY_fisheye_);
+		map_.at<cv::Vec2f>(h, w) = cv::Vec2f(x + CenterX_fisheye_, -y + CenterY_fisheye_);
 		}
 	map_.copyTo(original_map_);
 }
@@ -134,7 +134,7 @@ void FisheyeCorrector::generateMap()
 			0, 0, 1
 			);
 
-		axis_vertical_radian_ = degreeToRadian(0);
+		axis_vertical_radian_ = degreeToRadian(-30);
 		axis_horizontal_radian_ = degreeToRadian(0);
 
 
