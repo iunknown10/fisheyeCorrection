@@ -70,7 +70,10 @@ void FisheyeCorrector::generateMap()
 	Eigen::Vector3f object_axis = (new_camera_plane_center - camera_center).normalized();
 	quaternion.setFromTwoVectors(original_axis, object_axis);
 	quaternion.normalize();
-	Eigen::Matrix3f rotation = quaternion.toRotationMatrix();
+	
+	Eigen::Quaternion<float> quaternion_axis(cos(axis_rotation_radian_), 0, 0, sin(axis_rotation_radian_));
+	quaternion_axis.normalize();
+	Eigen::Matrix3f rotation = quaternion_axis.toRotationMatrix()*quaternion.toRotationMatrix();
 
 	Eigen::Matrix4f transform;
 	transform <<
@@ -134,9 +137,9 @@ void FisheyeCorrector::generateMap()
 			0, 0, 1
 			);
 
-		axis_vertical_radian_ = degreeToRadian(-30);
-		axis_horizontal_radian_ = degreeToRadian(0);
-
+		axis_vertical_radian_ = degreeToRadian(35);
+		axis_horizontal_radian_ = degreeToRadian(30);
+		axis_rotation_radian_ = degreeToRadian(-5);
 
 
 		generateMap();

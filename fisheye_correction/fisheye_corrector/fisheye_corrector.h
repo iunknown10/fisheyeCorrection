@@ -36,6 +36,7 @@ class FisheyeCorrector
 
 	float axis_vertical_radian_;
 	float axis_horizontal_radian_;
+	float axis_rotation_radian_;
 	float f_image_;
 
 	float size_scale_;
