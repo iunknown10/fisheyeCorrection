@@ -7,7 +7,8 @@
 #include <opencv2\core\core.hpp>
 #include <opencv2\highgui\highgui.hpp>
 #include <opencv2\imgproc\imgproc.hpp>
-
+#include <Eigen\core>
+#include <Eigen\geometry>
 const float kPI = 3.14159;
 inline float degreeToRadian(float d){ return (d / 180.f)* kPI; }
 inline float radianToDegree(float r){ return (r / kPI)* 180.f; }
@@ -40,7 +41,7 @@ class FisheyeCorrector
 	float f_image_;
 
 	float size_scale_;
-
+	Eigen::Matrix4f transform_camera_to_world_;
 	cv::Rect clip_region_;
 private:
 	void readDistortionList(std::string file_name);
