@@ -97,20 +97,17 @@ FisheyeCorrector::FisheyeCorrector(std::string correction_table_file, int input_
 			std::cout << "focal length of camera is too small. Please check if it's correct." << std::endl;
 			exit(-1);
 		}
-		K_ = (cv::Mat_<double>(3, 3) <<
-			f_camera_, 0, CenterX_,
-			0, f_camera_, CenterY_,
-			0, 0, 1
-			);
+		
 
-		axis_vertical_radian_ = degreeToRadian(40);
-		axis_horizontal_radian_ = degreeToRadian(30);
-		axis_rotation_radian_ = degreeToRadian(-5);
+		axis_vertical_radian_ = 0;
+		axis_horizontal_radian_ = 0;
+		axis_rotation_radian_ = 0;
 
 
-		generateMap();
-		clip_region_ = cv::Rect(0, 0, Width_, Height_);
-		std::cout << "Full size of corrected imageis  width:" << Width_ << " height:" << Height_ << std::endl;
+		
+		clip_region_ = cv::Rect(0, 0, 0, 0);
+		map_need_update = true;
+		
 	}
 
 

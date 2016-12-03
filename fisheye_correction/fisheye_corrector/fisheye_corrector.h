@@ -48,7 +48,9 @@ private:
 
 	void generateMap();
 
+	bool map_need_update = true;
 
+	
 public:
 	//Correction table and pixelHeight should provided by camera manufactor. focal length will infuence the size of the result image.
 	FisheyeCorrector(std::string correction_table_file, int input_height, int input_width, float pixelHeight, float f = 150, float VerticalDegeree = 60, float HorizontalDegree = 70);
@@ -56,6 +58,8 @@ public:
 
 	cv::Mat& correct(const cv::Mat& src, cv::Mat& dst)
 	{
+		if (map_need_update)
+			updateMap(); 
 		cv::remap(src, dst, map_, cv::Mat(), cv::INTER_CUBIC);
 		return dst;
 	}
@@ -68,20 +72,41 @@ public:
 	void setClipRegion(cv::Rect& region)
 	{
 		clip_region_ = region;
-		K_.at<double>(0, 2) -= region.x;
-		K_.at<double>(1, 2) -= region.y;
 		map_ = original_map_(region);
+		std::cout << "Size of corrected imageis  width:" << map_.cols << " height:" << map_.rows << std::endl;
 	}
 
 	cv::Mat getIntrinsicMatrix()
 	{
+		K_ = (cv::Mat_<double>(3, 3) <<
+			f_image_, 0, CenterX_ - clip_region_.x,
+			0, f_image_, CenterY_ - clip_region_.y,
+			0, 0, 1
+			);
+
 		return K_;
 	}
 
-	void setAxisDirection(float axis_direction_horizontal, float axis_direction_vertical)
+	Eigen::Matrix4f getExtrinsicMatrix()
+	{
+		return transform_camera_to_world_.inverse();
+	}
+
+	void setAxisDirection(float axis_direction_horizontal, float axis_direction_vertical, float axis_rotation)
 	{
 		axis_vertical_radian_ = degreeToRadian(axis_direction_vertical);
 		axis_horizontal_radian_ = degreeToRadian(axis_direction_horizontal);
+		axis_rotation_radian_ = degreeToRadian(axis_rotation);
+		map_need_update = true;
+	}
+	void updateMap()
+	{
 		generateMap();
+
+		if (clip_region_.area() == 0)
+			clip_region_ = cv::Rect(0, 0, Width_, Height_);
+
+		setClipRegion(clip_region_);
+		map_need_update = false;
 	}
 };

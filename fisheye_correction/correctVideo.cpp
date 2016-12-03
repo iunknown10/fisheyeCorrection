@@ -36,7 +36,9 @@ void correctVideo(int argc, char* argv[])
 	float pixel_height = 0.0042;
 	float f_image_ = 306.605;
 	FisheyeCorrector corrector(correction_table, capture.get(CV_CAP_PROP_FRAME_HEIGHT), capture.get(CV_CAP_PROP_FRAME_WIDTH), pixel_height, 306.6, 60, 60);
-	corrector.setClipRegion(cv::Rect(cv::Point(0, 0), cv::Point(corrector.getCorrectedSize().width, corrector.getCorrectedSize().height-60)));
+	corrector.setAxisDirection(60, 40, -5);
+	corrector.updateMap();
+	//corrector.setClipRegion(cv::Rect(cv::Point(0, 0), cv::Point(corrector.getCorrectedSize().width, corrector.getCorrectedSize().height-60)));
 	
 	//Deal with the perspective distortion
 	//This is a perspective distortion correction matrix finded manually. 
