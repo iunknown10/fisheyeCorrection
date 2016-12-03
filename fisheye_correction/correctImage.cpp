@@ -7,7 +7,6 @@
 #include <opencv2\highgui\highgui.hpp>
 #include <opencv2\imgproc\imgproc.hpp>
 #include "fisheye_corrector\fisheye_corrector.h"
-#include "find_perspective_transform\find_perspective_transform.h"
 #include "correctTools.h"
 
 void correctImage(int argc, char* argv[])

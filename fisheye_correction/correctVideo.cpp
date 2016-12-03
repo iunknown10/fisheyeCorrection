@@ -7,7 +7,6 @@
 #include <opencv2\highgui\highgui.hpp>
 #include <opencv2\imgproc\imgproc.hpp>
 #include "fisheye_corrector\fisheye_corrector.h"
-#include "find_perspective_transform\find_perspective_transform.h"
 #include "correctTools.h"
 
 void correctVideo(int argc, char* argv[])
@@ -35,7 +34,7 @@ void correctVideo(int argc, char* argv[])
 	}
 	capture >> frame;
 	float pixel_height = 0.0042;
-	float focal_length = 306.605;
+	float f_image_ = 306.605;
 	FisheyeCorrector corrector(correction_table, capture.get(CV_CAP_PROP_FRAME_HEIGHT), capture.get(CV_CAP_PROP_FRAME_WIDTH), pixel_height, 306.6, 60, 60);
 	corrector.setClipRegion(cv::Rect(cv::Point(0, 0), cv::Point(corrector.getCorrectedSize().width, corrector.getCorrectedSize().height-60)));
 	
@@ -82,10 +81,9 @@ void correctVideo(int argc, char* argv[])
 
 		writer << corrected_frame;
 		capture >> frame;
-		if (cv::waitKey(10) == 'c')
-			findPerspectiveDistortion(frame,corrector);
 		/*if (frameCount > 3000)
 			break;*/
+		cv::waitKey(10);
 		if (frameCount % 300 == 0)
 			std::cout << "frame " << frameCount << std::endl;
 		frameCount++;

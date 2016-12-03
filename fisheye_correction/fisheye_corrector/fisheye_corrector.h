@@ -8,27 +8,37 @@
 #include <opencv2\highgui\highgui.hpp>
 #include <opencv2\imgproc\imgproc.hpp>
 
+const float kPI = 3.14159;
+inline float degreeToRadian(float d){ return (d / 180.f)* kPI; }
+inline float radianToDegree(float r){ return (r / kPI)* 180.f; }
 
 
 
 class FisheyeCorrector
 {
 	std::vector<float> distortion_list_;
-	cv::Mat perspectiveTrans_;
 	cv::Mat K_;
 
 	cv::Mat original_map_;
 	cv::Mat map_;
-	float f_;
-	float VerticalDegeree_;
-	float HorizontalDegree_;
+	float f_camera_;
+	float CenterX_fisheye_;
+	float CenterY_fisheye_;
+	float pixelHeight_;
+
+
+	float vertical_range_;
+	float horizontal_range_;
 	int Width_;
 	int Height_;
 	float CenterX_;
 	float CenterY_;
-	float CenterX_fisheye_;
-	float CenterY_fisheye_;
-	float pixelHeight_;
+
+	float axis_vertical_radian_;
+	float axis_horizontal_radian_;
+	float f_image_;
+
+	float size_scale_;
 
 	cv::Rect clip_region_;
 private:
@@ -41,13 +51,6 @@ public:
 	//Correction table and pixelHeight should provided by camera manufactor. focal length will infuence the size of the result image.
 	FisheyeCorrector(std::string correction_table_file, int input_height, int input_width, float pixelHeight, float f = 150, float VerticalDegeree = 60, float HorizontalDegree = 70);
 
-	void setPerspectiveTransformation(cv::Mat& perspectiveTrans);
-
-
-	cv::Mat getPerspectiveTransformation()
-	{
-		return perspectiveTrans_;
-	}
 
 	cv::Mat& correct(const cv::Mat& src, cv::Mat& dst)
 	{
@@ -71,5 +74,12 @@ public:
 	cv::Mat getIntrinsicMatrix()
 	{
 		return K_;
+	}
+
+	void setAxisDirection(float axis_direction_horizontal, float axis_direction_vertical)
+	{
+		axis_vertical_radian_ = degreeToRadian(axis_direction_vertical);
+		axis_horizontal_radian_ = degreeToRadian(axis_direction_horizontal);
+		generateMap();
 	}
 };

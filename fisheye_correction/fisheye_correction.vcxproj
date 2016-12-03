@@ -67,7 +67,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -81,14 +81,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="correctImage.cpp" />
-    <ClCompile Include="find_perspective_transform\find_perspective_transform.cpp" />
     <ClCompile Include="correctVideo.cpp" />
     <ClCompile Include="fisheye_corrector\fisheye_corrector.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="correctTools.h" />
-    <ClInclude Include="find_perspective_transform\find_perspective_transform.h" />
     <ClInclude Include="fisheye_corrector\fisheye_corrector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
