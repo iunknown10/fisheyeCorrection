@@ -28,8 +28,8 @@ class FisheyeCorrector
 	float pixelHeight_;
 
 
-	float vertical_range_;
-	float horizontal_range_;
+	float vertical_range_radian_;
+	float horizontal_range_radian_;
 	int Width_;
 	int Height_;
 	float CenterX_;
@@ -41,7 +41,7 @@ class FisheyeCorrector
 	float f_image_;
 
 	float size_scale_;
-	Eigen::Matrix4f transform_camera_to_world_;
+	Eigen::Matrix4f transform_camera_to_originalplane_;
 	cv::Rect clip_region_;
 private:
 	void readDistortionList(std::string file_name);
@@ -89,7 +89,18 @@ public:
 
 	Eigen::Matrix4f getExtrinsicMatrix()
 	{
-		return transform_camera_to_world_.inverse();
+		Eigen::Matrix4f image_to_imageplane, originalplane_to_camera;
+		image_to_imageplane <<
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, -f_image_,
+			0, 0, 0, 1;
+		originalplane_to_camera<<
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, f_camera_,
+			0, 0, 0, 1;
+		return (originalplane_to_camera*transform_camera_to_originalplane_*image_to_imageplane).inverse();
 	}
 
 	void setAxisDirection(float axis_direction_horizontal, float axis_direction_vertical, float axis_rotation)
