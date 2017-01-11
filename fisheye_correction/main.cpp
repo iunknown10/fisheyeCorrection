@@ -14,5 +14,6 @@ int main(int argc, char* argv[])
 		exit(0);
 	}
 	//correctImage(argc, argv);
-	correctVideo(argc, argv);
+	//correctVideo(argc, argv);
+	testPointMapping(argc, argv);
 }

@@ -13,3 +13,4 @@
 void correctVideo(int argc, char* argv[]);
 void correctImage(int argc, char* argv[]);
 
+void testPointMapping(int argc, char* argv[]);
