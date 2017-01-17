@@ -18,7 +18,7 @@ void correctImage(int argc, char* argv[])
 
 
 	std::string correction_table = argv[1];
-	std::string imageName = argv[2];
+	std::string imageName = "E:\\下载文件\\搜狗浏览器\\pic_cap\\pic_cap\\pic\\0_cam_rear.bmp";
 	
 	cv::Mat image = cv::imread(imageName);
 	cv::Mat corrected_frame;
@@ -55,6 +55,12 @@ void correctImage(int argc, char* argv[])
 
 	
 		corrector.correct(image, corrected_frame);
+		
+
+		std::ofstream K_file("E:/下载文件/搜狗浏览器/pic_cap/pic_cap/pic/K.txt");
+		K_file << corrector.getIntrinsicMatrix() << std::endl;
+		K_file.close();
+
 
 		cv::imshow("frame", image);
 		cv::imshow("corrected", corrected_frame);

@@ -8,6 +8,12 @@ void FisheyeCorrector::readDistortionList(std::string file_name)
 	{
 		std::cout << "read distortion list" << std::endl;
 		std::ifstream file(file_name);
+		if (!file.is_open())
+		{
+			std::cout << "open file error";
+			exit(-1);
+		}
+			
 		distortion_list_.reserve(1035);
 		float current_distortion;
 		char skip;
@@ -46,6 +52,7 @@ void FisheyeCorrector::generateMap()
 	Eigen::Quaternion<float> quaternion_axis(cos(axis_rotation_radian_), 0, 0, sin(axis_rotation_radian_));
 	quaternion_axis.normalize();
 	Eigen::Matrix3f rotation = quaternion_axis.toRotationMatrix()*quaternion.toRotationMatrix();
+	transform_camera_to_originalplane_ = Eigen::Matrix4f();
 	transform_camera_to_originalplane_ <<
 		rotation(0, 0), rotation(0, 1), rotation(0, 2), new_camera_plane_center(0),
 		rotation(1, 0), rotation(1, 1), rotation(1, 2), new_camera_plane_center(1),
@@ -78,8 +85,8 @@ void FisheyeCorrector::generateMap()
 		float radius_in_fisheye = radius_in_fisheye_floor + (radius_in_fisheye_ceil - radius_in_fisheye_floor)*((degree * 10 - position_floor) / (position_ceil - position_floor));
 		radius_in_fisheye = radius_in_fisheye / pixelHeight_;
 
-		float x = ((point(0)) *(radius_in_fisheye / radius_in_project));
-		float y = (point(1))*(radius_in_fisheye / radius_in_project);
+		float x = point(0) *(radius_in_fisheye / radius_in_project);
+		float y = point(1)*(radius_in_fisheye / radius_in_project);
 
 		//Add the map relationship of Point(h,w)
 		//std::cout << "x " << x << "   y " << y << std::endl;
@@ -113,7 +120,12 @@ FisheyeCorrector::FisheyeCorrector(std::string correction_table_file, int input_
 		
 		clip_region_ = cv::Rect(0, 0, 0, 0);
 		map_need_update = true;
-		
+		new_camera_plane_center = Eigen::Vector3f(0,0,0);
+		camera_center = Eigen::Vector3f(0,0,0);
+		original_axis = Eigen::Vector3f(0,0,0);
+
+		transform_camera_to_originalplane_ = Eigen::Matrix4f();
+
 	}
 
 

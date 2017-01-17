@@ -41,7 +41,7 @@ class FisheyeCorrector
 	float f_image_;
 
 	float size_scale_;
-	Eigen::Matrix4f transform_camera_to_originalplane_;
+	Eigen::MatrixX4f transform_camera_to_originalplane_;
 	cv::Rect clip_region_;
 
 
@@ -59,8 +59,103 @@ private:
 public:
 	//Correction table and pixelHeight should provided by camera manufactor. focal length will infuence the size of the result image.
 	FisheyeCorrector(std::string correction_table_file, int input_height, int input_width, float pixelHeight, float f = 306.605, float VerticalDegeree = 60, float HorizontalDegree = 70);
+	FisheyeCorrector()
+		:pixelHeight_(0), f_camera_(0), horizontal_range_radian_(degreeToRadian(0)), vertical_range_radian_(degreeToRadian(0))
+	{
+		size_scale_ = 1;
+		CenterX_fisheye_ = 0 / 2.0f;
+		CenterY_fisheye_ = 0 / 2.0f;
+	
+		axis_vertical_radian_ = 0;
+		axis_horizontal_radian_ = 0;
+		axis_rotation_radian_ = 0;
+
+		clip_region_ = cv::Rect(0, 0, 0, 0);
+		map_need_update = true;
+		new_camera_plane_center = Eigen::Vector3f(0, 0, 0);
+		camera_center = Eigen::Vector3f(0, 0, 0);
+		original_axis = Eigen::Vector3f(0, 0, 0);
+	};
+	FisheyeCorrector(FisheyeCorrector& f)
+	{
+		distortion_list_.assign(f.distortion_list_.begin(), f.distortion_list_.end());
+		f.K_.copyTo(K_);
+
+		f.original_map_.copyTo(original_map_);
+		f.map_.copyTo(map_);
+		f_camera_ = f.f_camera_;
+		CenterX_fisheye_ = f.CenterX_fisheye_;
+		CenterY_fisheye_ = f.CenterY_fisheye_;
+		pixelHeight_ = f.pixelHeight_;
 
 
+		vertical_range_radian_ = f.vertical_range_radian_;
+		horizontal_range_radian_ = f.horizontal_range_radian_;
+		Width_ = f.Width_;
+		Height_ = f.Height_;
+		CenterX_ = f.CenterX_;
+		CenterY_ = f.CenterY_;
+
+		axis_vertical_radian_ = f.axis_vertical_radian_;
+		axis_horizontal_radian_ = f.axis_horizontal_radian_;
+		axis_rotation_radian_ = f.axis_rotation_radian_;
+		f_image_ = f.f_image_;
+
+		size_scale_ = f.size_scale_;
+		clip_region_ =  f.clip_region_;
+
+		/*transform_camera_to_originalplane_ << f.transform_camera_to_originalplane_(0, 0), f.transform_camera_to_originalplane_(0, 1), f.transform_camera_to_originalplane_(0, 2), f.transform_camera_to_originalplane_(0,3),
+			f.transform_camera_to_originalplane_(1, 0), f.transform_camera_to_originalplane_(1, 1), f.transform_camera_to_originalplane_(1, 2), f.transform_camera_to_originalplane_(1, 3),
+			f.transform_camera_to_originalplane_(2, 0), f.transform_camera_to_originalplane_(2, 1), f.transform_camera_to_originalplane_(2, 2), f.transform_camera_to_originalplane_(2, 3),
+			f.transform_camera_to_originalplane_(3, 0), f.transform_camera_to_originalplane_(3, 1), f.transform_camera_to_originalplane_(3, 2), f.transform_camera_to_originalplane_(3, 3);*/
+		//= Eigen::Matrix4f(f.transform_camera_to_originalplane_);
+		new_camera_plane_center = Eigen::Vector3f(f.new_camera_plane_center);
+		camera_center = Eigen::Vector3f(f.camera_center);
+		original_axis = Eigen::Vector3f(f.original_axis);
+	}
+
+	FisheyeCorrector& operator=(FisheyeCorrector& f)
+	{
+		if (this == &f)
+			return *this;
+		distortion_list_.assign(f.distortion_list_.begin(), f.distortion_list_.end());
+		f.K_.copyTo(K_);
+
+		f.original_map_.copyTo(original_map_);
+		f.map_.copyTo(map_);
+		f_camera_ = f.f_camera_;
+		CenterX_fisheye_ = f.CenterX_fisheye_;
+		CenterY_fisheye_ = f.CenterY_fisheye_;
+		pixelHeight_ = f.pixelHeight_;
+
+
+		vertical_range_radian_ = f.vertical_range_radian_;
+		horizontal_range_radian_ = f.horizontal_range_radian_;
+		Width_ = f.Width_;
+		Height_ = f.Height_;
+		CenterX_ = f.CenterX_;
+		CenterY_ = f.CenterY_;
+
+		axis_vertical_radian_ = f.axis_vertical_radian_;
+		axis_horizontal_radian_ = f.axis_horizontal_radian_;
+		axis_rotation_radian_ = f.axis_rotation_radian_;
+		f_image_ = f.f_image_;
+
+		size_scale_ = f.size_scale_;
+		clip_region_ = f.clip_region_;
+
+
+		transform_camera_to_originalplane_ = f.transform_camera_to_originalplane_;
+		/*transform_camera_to_originalplane_ << f.transform_camera_to_originalplane_(0, 0), f.transform_camera_to_originalplane_(0, 1), f.transform_camera_to_originalplane_(0, 2), f.transform_camera_to_originalplane_(0, 3),
+			f.transform_camera_to_originalplane_(1, 0), f.transform_camera_to_originalplane_(1, 1), f.transform_camera_to_originalplane_(1, 2), f.transform_camera_to_originalplane_(1, 3),
+			f.transform_camera_to_originalplane_(2, 0), f.transform_camera_to_originalplane_(2, 1), f.transform_camera_to_originalplane_(2, 2), f.transform_camera_to_originalplane_(2, 3),
+			f.transform_camera_to_originalplane_(3, 0), f.transform_camera_to_originalplane_(3, 1), f.transform_camera_to_originalplane_(3, 2), f.transform_camera_to_originalplane_(3, 3);*/
+		new_camera_plane_center = Eigen::Vector3f(f.new_camera_plane_center);
+		camera_center = Eigen::Vector3f(f.camera_center);
+		original_axis = Eigen::Vector3f(f.original_axis);
+
+		return *this;
+	}
 	cv::Mat& correct(const cv::Mat& src, cv::Mat& dst)
 	{
 		if (map_need_update)
@@ -74,7 +169,7 @@ public:
 	void mapToOriginalImage(const std::vector<pointType>& points, std::vector<pointType>& points_in_fisheye);
 
 	template<class pointType>
-	void mapFromCorrectedImageToCenterImagePlane(const std::vector<pointType>& points, std::vector<pointType>& points_in_pinhole, float cx, float cy);
+	void  mapFromCorrectedImageToCenterImagePlane(const std::vector<pointType>& points, std::vector<pointType>& points_in_pinhole, std::vector<bool>& points_validat, float cx, float cy, float f_center_image);
 
 	cv::Size getCorrectedSize()
 	{
@@ -138,6 +233,7 @@ public:
 		setClipRegion(clip_region_);
 		map_need_update = false;
 	}
+
 };
 
 
@@ -151,7 +247,6 @@ template<class pointType>
 void FisheyeCorrector::mapToOriginalImage(const std::vector<pointType>& points, std::vector<pointType>& points_in_fisheye)
 {
 	points_in_fisheye.resize(points.size());
-	std::cout<<"CenterX_fisheye_ " << CenterX_fisheye_ << "  CenterY_fisheye_ " << CenterY_fisheye_ << std::endl;
 	for (int i = 0; i < points.size(); i++)
 	{
 		float h = points[i].pt.y/size_scale_ + clip_region_.tl().y;
@@ -177,8 +272,8 @@ void FisheyeCorrector::mapToOriginalImage(const std::vector<pointType>& points, 
 		float radius_in_fisheye = radius_in_fisheye_floor + (radius_in_fisheye_ceil - radius_in_fisheye_floor)*((degree * 10 - position_floor) / (position_ceil - position_floor));
 		radius_in_fisheye = radius_in_fisheye / pixelHeight_;
 
-		float x = ((point(0)) *(radius_in_fisheye / radius_in_project));
-		float y = (point(1))*(radius_in_fisheye / radius_in_project);
+		float x = point(0) *(radius_in_fisheye / radius_in_project);
+		float y = point(1)*(radius_in_fisheye / radius_in_project);
 		//std::cout << "x " << x << "   y " << y << std::endl;
 		//Add the map relationship of Point(h,w)
 		points_in_fisheye[i] = points[i];
@@ -189,9 +284,14 @@ void FisheyeCorrector::mapToOriginalImage(const std::vector<pointType>& points, 
 
 
 template<class pointType>
-void FisheyeCorrector::mapFromCorrectedImageToCenterImagePlane(const std::vector<pointType>& points, std::vector<pointType>& points_in_pinhole,float cx,float cy)
+void FisheyeCorrector::mapFromCorrectedImageToCenterImagePlane(const std::vector<pointType>& points, std::vector<pointType>& points_in_pinhole, std::vector<bool>& points_validat, float cx, float cy, float f_center_image)
 {
+	const float max_project_angle_cos = 0.15;//about 82 degree
+
+
 	points_in_pinhole.resize(points.size());
+	points_validat.resize(points.size());
+	double ratio = f_center_image / f_camera_;
 	for (int i = 0; i < points.size(); i++)
 	{
 		float h = points[i].pt.y / size_scale_ + clip_region_.tl().y;
@@ -200,8 +300,41 @@ void FisheyeCorrector::mapFromCorrectedImageToCenterImagePlane(const std::vector
 		Eigen::Vector4f point_homo(w - CenterX_, -h + CenterY_, 0, 1);
 
 		point_homo = transform_camera_to_originalplane_*point_homo;
+		Eigen::Vector3f  point(point_homo(0), point_homo(1), point_homo(2));
+		float radius_in_project = sqrt(point(0)*point(0) + point(1)*point(1));
+
+		float cos_value = original_axis.dot((point - camera_center).normalized());
+		float x, y;
+		if (point(2) < 0 && cos_value > max_project_angle_cos)
+		{
+			float radius_in_center_plane = (radius_in_project*point(2))/(-point(2)-f_camera_) + radius_in_project;
+
+			x = point(0) *(radius_in_center_plane / radius_in_project);
+			y = point(1)*(radius_in_center_plane / radius_in_project);
+		}
+		else if (point(2) > 0 && cos_value > max_project_angle_cos)
+		{
+			float radius_in_center_plane = radius_in_project / (point(2)/f_camera_ + 1);
+
+			x = point(0) *(radius_in_center_plane / radius_in_project);
+			y = point(1)*(radius_in_center_plane / radius_in_project);
+		}
+		else if (point(2) == 0)
+		{
+			x = point(0);
+			y = point(1);
+		}
+		else
+		{
+			points_validat[i] = false;
+			points_in_pinhole[i] = points[i];
+			points_in_pinhole[i].pt.x = 0;
+			points_in_pinhole[i].pt.y = 0;
+			continue;
+		}
 		points_in_pinhole[i] = points[i];
-		points_in_pinhole[i].pt.x = point_homo(0) + cx;
-		points_in_pinhole[i].pt.y = -point_homo(1) + cy;
+		points_in_pinhole[i].pt.x = x*ratio + cx;
+		points_in_pinhole[i].pt.y = -y*ratio + cy;
+		points_validat[i] = true;
 	}
 }

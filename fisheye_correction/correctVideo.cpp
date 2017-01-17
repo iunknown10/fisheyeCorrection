@@ -36,10 +36,10 @@ void correctVideo(int argc, char* argv[])
 	float pixel_height = 0.0042;
 	float f_image_ = 306.605;
 	FisheyeCorrector corrector(correction_table, capture.get(CV_CAP_PROP_FRAME_HEIGHT), capture.get(CV_CAP_PROP_FRAME_WIDTH), pixel_height, f_image_, 60, 60);
-	corrector.setAxisDirection(0,35,0);//30,35,-7
+	corrector.setAxisDirection(0,0,0);//30,35,-7
 	corrector.updateMap();
-	corrector.setClipRegion(cv::Rect(cv::Point(0, 430), cv::Point(corrector.getCorrectedSize().width-0, corrector.getCorrectedSize().height)));
-	corrector.setSizeScale(0.5);
+	//corrector.setClipRegion(cv::Rect(cv::Point(0, 430), cv::Point(corrector.getCorrectedSize().width-0, corrector.getCorrectedSize().height)));
+	//corrector.setSizeScale(0.5);
 
 	cv::Mat K = corrector.getIntrinsicMatrix();
 	std::cout << "K" << std::endl << K << std::endl;

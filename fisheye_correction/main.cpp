@@ -6,6 +6,8 @@
 #include <opencv2\imgproc\imgproc.hpp>
 #include <opencv2\features2d\features2d.hpp>
 #include <opencv2\contrib\retina.hpp>
+
+
 int main(int argc, char* argv[])
 {
 	if (argc < 3)
@@ -16,4 +18,5 @@ int main(int argc, char* argv[])
 	//correctImage(argc, argv);
 	//correctVideo(argc, argv);
 	testPointMapping(argc, argv);
+
 }
