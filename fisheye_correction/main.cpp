@@ -5,7 +5,7 @@
 
 #include <opencv2\imgproc\imgproc.hpp>
 #include <opencv2\features2d\features2d.hpp>
-#include <opencv2\contrib\retina.hpp>
+//#include <opencv2\contrib\retina.hpp>
 
 
 int main(int argc, char* argv[])
@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 		exit(0);
 	}
 	//correctImage(argc, argv);
-	//correctVideo(argc, argv);
-	testPointMapping(argc, argv);
+	correctVideo(argc, argv);
+	//testPointMapping(argc, argv);
 
 }

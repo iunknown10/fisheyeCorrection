@@ -29,9 +29,6 @@
     <ClCompile Include="correctVideo.cpp">
       <Filter>tools</Filter>
     </ClCompile>
-    <ClCompile Include="testPointMap.cpp">
-      <Filter>tools</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fisheye_corrector\fisheye_corrector.h">

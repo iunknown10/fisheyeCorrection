@@ -32,14 +32,19 @@ void correctVideo(int argc, char* argv[])
 		system("pause");
 		exit(-1);
 	}
+	
 	capture >> frame;
+	cv::imshow("frame", frame);
+	cv::waitKey(10);
+	capture.set(CV_CAP_PROP_FPS, 25);
 	float pixel_height = 0.0042;
 	float f_image_ = 306.605;
-	FisheyeCorrector corrector(correction_table, capture.get(CV_CAP_PROP_FRAME_HEIGHT), capture.get(CV_CAP_PROP_FRAME_WIDTH), pixel_height, f_image_, 60, 60);
-	corrector.setAxisDirection(0,0,0);//30,35,-7
+	std::cout << capture.get(cv::CAP_PROP_FRAME_HEIGHT) << " " << capture.get(cv::CAP_PROP_FRAME_WIDTH) << std::endl;
+	FisheyeCorrector corrector(correction_table, capture.get(CV_CAP_PROP_FRAME_HEIGHT), capture.get(CV_CAP_PROP_FRAME_WIDTH), pixel_height, 306.6,50, 60);
+	corrector.setAxisDirection(0, 30,-2);
 	corrector.updateMap();
-	//corrector.setClipRegion(cv::Rect(cv::Point(0, 430), cv::Point(corrector.getCorrectedSize().width-0, corrector.getCorrectedSize().height)));
-	//corrector.setSizeScale(0.5);
+	corrector.setClipRegion(cv::Rect(cv::Point(0, 200), cv::Point(corrector.getCorrectedSize().width, corrector.getCorrectedSize().height-200)));
+
 
 	cv::Mat K = corrector.getIntrinsicMatrix();
 	std::cout << "K" << std::endl << K << std::endl;
@@ -62,8 +67,8 @@ void correctVideo(int argc, char* argv[])
 	else
 		correct_file_name += videoName;
 
-
-	cv::VideoWriter writer(filePath + correct_file_name, capture.get(CV_CAP_PROP_FOURCC), capture.get(CV_CAP_PROP_FPS), corrector.getCorrectedSize());
+	std::cout << capture.get(CV_CAP_PROP_FPS) << std::endl;
+	cv::VideoWriter writer(filePath + correct_file_name, capture.get(CV_CAP_PROP_FOURCC), 15, corrector.getCorrectedSize());
 	std::cout << "save file to " << filePath + correct_file_name<<std::endl;
 	int frameCount = 0;
 	while (!frame.empty())
