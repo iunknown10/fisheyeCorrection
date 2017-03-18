@@ -56,8 +56,7 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\ThirdPartyLibrary\Eigen.props" />
-    <Import Project="F:\programPlugs\Opencv2.4.10\opencv2410d.props" />
-    <Import Project="F:\programPlugs\OpenCV3\OpenCV3d.props" />
+    <Import Project="F:\programPlugs\openCV2.4.11\opencv2411d.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -68,7 +67,7 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\ThirdPartyLibrary\Eigen.props" />
-    <Import Project="F:\programPlugs\OpenCV320\OpenCV320.props" />
+    <Import Project="F:\programPlugs\openCV2.4.11\opencv2411.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -164,6 +163,7 @@
     <ClCompile Include="correctImage.cpp" />
     <ClCompile Include="correctVideo.cpp" />
     <ClCompile Include="fisheye_corrector\fisheye_corrector.cpp" />
+    <ClCompile Include="lableMapping.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>

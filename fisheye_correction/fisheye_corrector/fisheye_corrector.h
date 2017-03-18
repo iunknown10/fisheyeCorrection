@@ -249,8 +249,8 @@ void FisheyeCorrector::mapToOriginalImage(const std::vector<pointType>& points, 
 	points_in_fisheye.resize(points.size());
 	for (int i = 0; i < points.size(); i++)
 	{
-		float h = points[i].pt.y/size_scale_ + clip_region_.tl().y;
-		float w = points[i].pt.x/size_scale_ + clip_region_.tl().x;
+		float h = points[i].y/size_scale_ + clip_region_.tl().y;
+		float w = points[i].x/size_scale_ + clip_region_.tl().x;
 		//Transform the points in the corrected image to it's correct position
 		Eigen::Vector4f point_homo(w - CenterX_, -h + CenterY_, 0, 1);
 
@@ -277,8 +277,8 @@ void FisheyeCorrector::mapToOriginalImage(const std::vector<pointType>& points, 
 		//std::cout << "x " << x << "   y " << y << std::endl;
 		//Add the map relationship of Point(h,w)
 		points_in_fisheye[i] = points[i];
-		points_in_fisheye[i].pt.x = x + CenterX_fisheye_;
-		points_in_fisheye[i].pt.y = -y + CenterY_fisheye_;
+		points_in_fisheye[i].x = x + CenterX_fisheye_;
+		points_in_fisheye[i].y = -y + CenterY_fisheye_;
 	}
 }
 

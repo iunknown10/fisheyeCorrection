@@ -39,7 +39,6 @@ void correctVideo(int argc, char* argv[])
 	capture.set(CV_CAP_PROP_FPS, 25);
 	float pixel_height = 0.0042;
 	float f_image_ = 306.605;
-	std::cout << capture.get(cv::CAP_PROP_FRAME_HEIGHT) << " " << capture.get(cv::CAP_PROP_FRAME_WIDTH) << std::endl;
 	FisheyeCorrector corrector(correction_table, capture.get(CV_CAP_PROP_FRAME_HEIGHT), capture.get(CV_CAP_PROP_FRAME_WIDTH), pixel_height, 306.6,50, 60);
 	corrector.setAxisDirection(0, 30,-2);
 	corrector.updateMap();
